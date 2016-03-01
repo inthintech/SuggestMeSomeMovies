@@ -8,7 +8,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sets the layout
+        //sets the layout file
         setContentView(R.layout.activity_main);
     }
 }
