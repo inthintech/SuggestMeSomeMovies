@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Suggest Me Some Movies</string>
     <string name="facebook_app_id">223264698023434</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_home">My Library</string>
 </resources>

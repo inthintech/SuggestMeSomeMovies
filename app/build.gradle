@@ -25,5 +25,9 @@ dependencies {
     // add facebook sdk
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
+    compile 'com.mcxiaoke.volley:library:1.0.6@aar'
     compile 'com.android.support:design:23.2.0'
+    compile ('com.facebook.fresco:fresco:0.9.0+'){
+        exclude group: 'com.parse.bolts', module: 'bolts-android';
+    }
 }
