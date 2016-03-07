@@ -2,4 +2,5 @@
     <string name="app_name">Suggest Me Some Movies</string>
     <string name="facebook_app_id">223264698023434</string>
     <string name="title_activity_home">My Library</string>
+    <string name="icon_tick">&#xf00c;</string>
 </resources>
