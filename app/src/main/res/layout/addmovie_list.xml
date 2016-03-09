@@ -21,6 +21,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="10dp"
         fresco:roundedCornerRadius="5dp"
+        fresco:failureImage="@drawable/noimage"
         />
 
     <TextView

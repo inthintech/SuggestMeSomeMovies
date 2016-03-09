@@ -4,6 +4,7 @@ package com.keyrelations.suggestmesomemovies;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -18,11 +20,13 @@ import java.util.List;
 public class AddMovieAdapter extends ArrayAdapter<Movie> {
 
     private List<Movie> movies;
+    private Context mContext;
 
     public AddMovieAdapter(Context context, int resource, List<Movie> objects) {
         super(context, resource, objects);
         //AssetManager mngr = context.getAssets();
         movies = objects;
+        this.mContext = context;
     }
 
     @Override
@@ -33,12 +37,22 @@ public class AddMovieAdapter extends ArrayAdapter<Movie> {
                     .inflate(R.layout.addmovie_list,parent,false);
         }
 
-        Movie movie = movies.get(position);
+        final Movie movie = movies.get(position);
 
         Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fontawesome-webfont.ttf");
 
         Button addButton = (Button) convertView.findViewById(R.id.buttonAddMovie);
         addButton.setTypeface(font);
+
+        final RequestQueue queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(mContext instanceof AddMovieActivity){
+                    ((AddMovieActivity)mContext).addMovie(movie.getId());
+                }
+            }
+        });
 
         TextView text1 = (TextView) convertView.findViewById(R.id.textViewMovieName);
         text1.setText(movie.getTitle());

@@ -1,14 +1,18 @@
 package com.keyrelations.suggestmesomemovies;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,21 +30,28 @@ import java.util.List;
 
 public class AddMovieActivity extends AppCompatActivity {
 
-
-
-
+    String url;
+    RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+    ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
-
+        Log.d("DEBUGLOG", "Activity Started");
         Typeface font = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
 
-        Button searchButton = (Button) findViewById(R.id.searchButton);
+        final Button searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setTypeface(font);
 
         final TextView searchText = (TextView) findViewById(R.id.searchMovieTextBox);
+
+        final TextView textMsg = (TextView) findViewById(R.id.textViewMessage);
+
+        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        //change the spinner color
+        spinner.getIndeterminateDrawable().setColorFilter(0xFF4F0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        spinner.setVisibility(View.GONE);
 
 
         final List<Movie> movie = new ArrayList<>();
@@ -56,50 +67,111 @@ public class AddMovieActivity extends AppCompatActivity {
             }
         });
 
-        String url = "http://api.keyrelations.in/smsm/searchmovie/" + AccessToken.getCurrentAccessToken().getToken() + "/rock";
-        final RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                if (!searchText.getText().toString().matches("")) {
+                    //Log.d("SEARCH", "ONCLICK");
+                    textMsg.setText("");
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(searchButton.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
 
-        //define the json request
-        final JsonArrayRequest jsArrRequest = new JsonArrayRequest(url,
+                    spinner.setVisibility(View.VISIBLE);
+
+                    Log.d("DEBUGLOG", "A new search is started");
+                    //String  input = searchText.getText().toString();
+                    //input.replace(" ", "+");
+                    url = "http://api.keyrelations.in/smsm/searchmovie/" + AccessToken.getCurrentAccessToken().getToken() + "/" + searchText.getText().toString().replace(" ","+");
+                    Log.d("URL",url);
+                    movie.clear();
+
+                    queue.add(new JsonArrayRequest(url,
+                            new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    Log.d("DEBUGLOG","Response is valid");
+                                    Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
+                                    if(response.length()==0){
+                                        textMsg.setText("No data found");
+                                    }
+                                    else{
+                                        textMsg.setText("");
+                                    }
+                                    try {
+                                        for (int i = 0; i < response.length(); i++) {
+                                            Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"), response.getJSONObject(i).getString("release_year"), response.getJSONObject(i).getString("poster_path"));
+                                            movie.add(mov);
+                                            if (i == response.length() - 1) {
+                                                //lv.setAdapter(adapter);
+                                                adapter.notifyDataSetChanged();
+                                                Log.d("DEBUGLOG","Data Updated");
+                                            }
+
+                                        }
+
+                                    } catch (JSONException e) {
+
+                                        e.printStackTrace();
+                                    }
+                                    spinner.setVisibility(View.GONE);
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("ERROR", "ERROR");
+                            spinner.setVisibility(View.GONE);
+                            textMsg.setText("Error! Please try again.");
+                        }
+                    }));
+
+                }
+            }
+        });
+
+    }
+
+    public void addMovie(final String movieId){
+        spinner.setVisibility(View.VISIBLE);
+        Log.d("DEBUGLOG", "Started to add movie");
+        url = "http://api.keyrelations.in/smsm/addusermovie/" + AccessToken.getCurrentAccessToken().getToken() + "/" + movieId;
+        Log.d("DEBUGLOG", url);
+        JsonArrayRequest jrArrRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.d("DEBUGLOG", "Response is valid");
+                        //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
                         try {
-                            for (int i = 0; i < response.length(); i++) {
-                                Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"),response.getJSONObject(i).getString("release_year"),response.getJSONObject(i).getString("poster_path"));
-                                movie.add(mov);
-                                if(i==response.length()-1){
-                                    //lv.setAdapter(adapter);
-                                    adapter.notifyDataSetChanged();
-                                    Log.d("SERVICES","UPDATED");
-                                }
-                            }
+                            //Log.d("DEBUGLOG", response.getJSONObject(0).getString("message"));
+                            //Log.d("DEBUGLOG", movieId);
 
+                            if (response.getJSONObject(0).getInt("code")==1) {
+                                spinner.setVisibility(View.GONE);
+                                Toast.makeText(getBaseContext(), "Movie added to library", Toast.LENGTH_SHORT).show();
+                                Log.d("DEBUGLOG", "Movie added");
+                            } else {
+                                spinner.setVisibility(View.GONE);
+                                Toast.makeText(getBaseContext(), "Movie exists in library", Toast.LENGTH_SHORT).show();
+                                Log.d("DEBUGLOG", "Movie Exists");
+                            }
                         } catch (JSONException e) {
+
+                            spinner.setVisibility(View.GONE);
                             e.printStackTrace();
+
                         }
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ERROR","ERROR");
+                //Log.d("ERROR", "ERROR");
+                //textMsg.setText("Error! Please try again.");
+                spinner.setVisibility(View.GONE);
+                Log.d("DEBUGLOG", "Error Response");
             }
         });
-
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                if (!searchText.getText().toString().matches("")) {
-                    //Log.d("SEARCH", "ONCLICK");
-                    //url = url + searchText.getText().toString();
-
-
-                }
-            }
-        });
-
-        queue.add(jsArrRequest);
-
+        jrArrRequest.setShouldCache(false);
+        queue.add(jrArrRequest);
     }
 }

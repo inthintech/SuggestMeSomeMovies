@@ -46,6 +46,13 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> {
         TextView text2 = (TextView) convertView.findViewById(R.id.textViewMovieReleaseYear);
         text2.setText(movie.getReleaseYear());
 
+        TextView text3 = (TextView) convertView.findViewById(R.id.textViewIMDBRating);
+        text3.setText(movie.getImdbRating());
+
+        TextView text4 = (TextView) convertView.findViewById(R.id.textViewSuggestedCnt);
+        text4.setTypeface(font);
+        text4.setText(getContext().getString(R.string.icon_people)+" "+movie.getSuggestedCount());
+
         Uri uri = Uri.parse("http://image.tmdb.org/t/p/w342/" + movie.getPosterPath());
         SimpleDraweeView draweeView = (SimpleDraweeView) convertView.findViewById(R.id.imageViewMoviePoster);
 

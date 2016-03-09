@@ -5,4 +5,5 @@
     <string name="icon_tick">&#xf00c;</string>
     <string name="icon_search">&#xf002;</string>
     <string name="icon_add">&#xf067;</string>
+    <string name="icon_people">&#xf007;</string>
 </resources>
