@@ -6,4 +6,6 @@
     <string name="icon_search">&#xf002;</string>
     <string name="icon_add">&#xf067;</string>
     <string name="icon_people">&#xf007;</string>
+    <string name="drawer_open">OPEN</string>
+    <string name="drawer_close">CLOSE</string>
 </resources>

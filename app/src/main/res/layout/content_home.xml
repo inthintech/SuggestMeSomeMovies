@@ -1,27 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.keyrelations.suggestmesomemovies.HomeActivity"
-    tools:showIn="@layout/activity_home">
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/activity_main_swipe_refresh_layout"
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listViewMyLibrary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-         />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?android:attr/actionBarSize"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.keyrelations.suggestmesomemovies.HomeActivity"
+            tools:showIn="@layout/activity_home">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
 
-</RelativeLayout>
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/activity_main_swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ListView
+                    android:id="@+id/listViewMyLibrary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <!-- The navigation drawer 483D8B 4e69a2-->
+
+    <RelativeLayout
+        android:id="@+id/whatYouWantInLeftDrawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:background="#fff"
+        >
+
+        <!--
+        <com.facebook.login.widget.ProfilePictureView
+
+            android:id="@+id/fbprofilepic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            facebook:com_facebook_preset_size="normal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_centerHorizontal="true"
+            /> -->
+
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/fbprofilepic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            fresco:placeholderImageScaleType="centerCrop"
+            fresco:roundAsCircle="true" />
+
+        <TextView
+            android:id="@+id/navMenuUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/fbprofilepic"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
+
+        <TextView
+            android:id="@+id/navMenuTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/navMenuUserName"
+            android:background="#eee"
+            android:gravity="center_vertical"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Find Movies by Genre"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+             />
+
+        <ListView
+            android:id="@+id/left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/navMenuTitle"
+            android:layout_gravity="start"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.DrawerLayout>

@@ -152,7 +152,7 @@ public class AddMovieActivity extends AppCompatActivity {
                             } else {
                                 spinner.setVisibility(View.GONE);
                                 Toast.makeText(getBaseContext(), "Movie exists in library", Toast.LENGTH_SHORT).show();
-                                Log.d("DEBUGLOG", "Movie Exists");
+                                Log.d("DEBUGLOG", "Movie added");
                             }
                         } catch (JSONException e) {
 
