@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,6 +33,11 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
+    //new request queue
+    //RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
+
+
     public void navigateToAddMovieActivity(){
         Intent intent = new Intent(this, AddMovieActivity.class);
         startActivity(intent);
@@ -53,10 +59,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // log the current user access token
-        Log.d("USER_ACCESS_TOKEN",AccessToken.getCurrentAccessToken().getToken());
+        SwipeRefreshLayout mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
 
-        String url = "http://api.keyrelations.in/smsm/getuserlibrary/"+AccessToken.getCurrentAccessToken().getToken();
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                                                     @Override
+                                                     public void onRefresh() {
+
+                                                     }
+                                                 });
+                // log the current user access token
+                //Log.d("USER_ACCESS_TOKEN",AccessToken.getCurrentAccessToken().getToken());
+
+
         final List<Movie> movie = new ArrayList<>();
         final MyLibraryAdapter adapter = new MyLibraryAdapter(this, R.layout.mylibrary_list, movie);
         final ListView lv = (ListView) findViewById(R.id.listViewMyLibrary);
@@ -70,8 +84,10 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        //new request queue
+        String url = "http://api.keyrelations.in/smsm/getuserlibrary/" + AccessToken.getCurrentAccessToken().getToken();
+
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
 
         //define the json request
         final JsonArrayRequest jsArrRequest = new JsonArrayRequest(url,
@@ -100,7 +116,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         queue.add(jsArrRequest);
