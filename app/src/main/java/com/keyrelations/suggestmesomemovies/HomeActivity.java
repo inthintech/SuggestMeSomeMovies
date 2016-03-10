@@ -72,6 +72,12 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void navigateToMovieInfoActivity(String movieId) {
+        Intent intent = new Intent(this, MovieInfoActivity.class);
+        intent.putExtra("movieId", movieId);
+        startActivity(intent);
+    }
+
     public void navigateToFindMovieActivity(String searchId) {
         Intent intent = new Intent(this, FindMovieActivity.class);
         String genreSearchId = "0";
@@ -230,7 +236,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Movie mov = (Movie) lv.getItemAtPosition(position);
-                Log.d("CLICKED", String.valueOf(mov.getId()));
+                //Log.d("CLICKED", String.valueOf(mov.getId()));
+                navigateToMovieInfoActivity(String.valueOf(mov.getId()));
             }
         });
 

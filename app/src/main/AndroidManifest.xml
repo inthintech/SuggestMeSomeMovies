@@ -42,7 +42,8 @@
             android:label="Add Movie" />
         <activity
             android:name=".FindMovieActivity"
-            android:label="Find Movie"></activity>
+            android:label="Find Movie" />
+        <activity android:name=".MovieInfoActivity" android:label="Movie Info"></activity>
     </application>
 
 </manifest>

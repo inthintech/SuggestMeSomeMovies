@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movieInfoMainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    tools:context="com.keyrelations.suggestmesomemovies.MovieInfoActivity">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageViewMovieBackDrop"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        fresco:roundAsCircle="false"
+        fresco:actualImageScaleType="fitXY"
+        fresco:failureImage="@drawable/noimage"
+        />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageViewMoviePoster"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/imageViewMovieBackDrop"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-60dp"
+        fresco:roundedCornerRadius="5dp"
+        fresco:roundAsCircle="false"
+        fresco:actualImageScaleType="fitXY"
+        fresco:failureImage="@drawable/noimage"
+        />
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/imageViewIMDB"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        fresco:roundAsCircle="false"
+        fresco:actualImageScaleType="fitXY"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/imageViewMoviePoster"
+        fresco:roundedCornerRadius="5dp"
+        fresco:backgroundImage="@drawable/imdb"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8.7"
+        android:id="@+id/textViewIMDBRating"
+        android:layout_toRightOf="@+id/imageViewIMDB"
+        android:layout_toEndOf="@+id/imageViewIMDB"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/imageViewIMDB"
+        android:layout_below="@+id/imageViewMoviePoster"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="3dp"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The Conjuring"
+        android:id="@+id/textViewMovieName"
+        android:layout_toRightOf="@+id/imageViewMoviePoster"
+        android:layout_toEndOf="@+id/imageViewMoviePoster"
+        android:layout_below="@+id/imageViewMovieBackDrop"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(2013)"
+        android:id="@+id/textViewMovieReleaseYear"
+        android:layout_toRightOf="@+id/imageViewMoviePoster"
+        android:layout_toEndOf="@+id/imageViewMoviePoster"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewMovieName"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/icon_movie"
+        android:id="@+id/textViewMovieGenreIcon"
+        android:layout_toRightOf="@+id/imageViewMoviePoster"
+        android:layout_toEndOf="@+id/imageViewMoviePoster"
+        android:textSize="14sp"
+        android:layout_below="@+id/textViewMovieReleaseYear"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Horror"
+        android:id="@+id/textViewMovieGenreContent"
+        android:layout_toRightOf="@+id/textViewMovieGenreIcon"
+        android:layout_toEndOf="@+id/textViewMovieGenreIcon"
+        android:textSize="14sp"
+        android:layout_below="@+id/textViewMovieReleaseYear"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="6dp"/>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/imageViewIMDB"
+        android:fillViewport="false">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Story Synopsis"
+        android:textStyle="italic"
+        android:id="@+id/textViewPlotLabel"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse."
+        android:id="@+id/textViewPlotContent"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewPlotLabel"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Directed By"
+        android:textStyle="italic"
+        android:id="@+id/textViewDirectorLabel"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewPlotContent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="James Wan"
+        android:id="@+id/textViewDirectorContent"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewDirectorLabel"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actors"
+        android:textStyle="italic"
+        android:id="@+id/textViewActorLabel"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewDirectorContent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="James Wan"
+        android:id="@+id/textViewActorContent"
+        android:textSize="16sp"
+        android:layout_below="@+id/textViewActorLabel"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
+
+</RelativeLayout>
