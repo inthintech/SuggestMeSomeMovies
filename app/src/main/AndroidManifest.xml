@@ -39,7 +39,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddMovieActivity"
-            android:parentActivityName=".HomeActivity" android:label="Add Movie"></activity>
+            android:label="Add Movie" />
+        <activity
+            android:name=".FindMovieActivity"
+            android:label="Find Movie"></activity>
     </application>
 
 </manifest>

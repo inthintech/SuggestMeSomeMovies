@@ -44,8 +44,6 @@ public class AddMovieAdapter extends ArrayAdapter<Movie> {
         Button addButton = (Button) convertView.findViewById(R.id.buttonAddMovie);
         addButton.setTypeface(font);
 
-        final RequestQueue queue = VolleySingleton.getInstance(getContext()).getRequestQueue();
-
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(mContext instanceof AddMovieActivity){

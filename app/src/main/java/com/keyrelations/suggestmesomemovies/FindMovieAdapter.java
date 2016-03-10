@@ -1,10 +1,8 @@
 package com.keyrelations.suggestmesomemovies;
 
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,12 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-public class MyLibraryAdapter extends ArrayAdapter<Movie> {
+public class FindMovieAdapter extends ArrayAdapter<Movie> {
 
     private List<Movie> movies;
     private Context mContext;
 
-    public MyLibraryAdapter(Context context, int resource, List<Movie> objects) {
+    public FindMovieAdapter(Context context, int resource, List<Movie> objects) {
         super(context, resource, objects);
         //AssetManager mngr = context.getAssets();
         movies = objects;
@@ -33,36 +31,20 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> {
 
         if(convertView==null){
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.mylibrary_list,parent,false);
+                    .inflate(R.layout.findmovie_list,parent,false);
         }
 
         final Movie movie = movies.get(position);
 
         Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fontawesome-webfont.ttf");
 
-        final Button suggestButton = (Button) convertView.findViewById(R.id.buttonEditSuggestion);
-        suggestButton.setTypeface(font);
+        Button addButton = (Button) convertView.findViewById(R.id.buttonAddMovie);
+        addButton.setTypeface(font);
 
-        if(movie.getIsSuggested().equals("Y")){
-            suggestButton.setTextColor(ContextCompat.getColor(mContext,R.color.colorMovieSuggested));
-        }
-        else{
-            suggestButton.setTextColor(ContextCompat.getColor(mContext,R.color.colorMovieUnSuggested));
-        }
-
-        suggestButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mContext instanceof HomeActivity) {
-                    if(movie.getIsSuggested().equals("Y")){
-                        movie.putIsSuggested("N");
-                        //suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieUnSuggested));
-                        ((HomeActivity) mContext).editMovieSuggestion(movie.getId(), "0");
-                    }
-                    else{
-                        movie.putIsSuggested("Y");
-                        //suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieSuggested));
-                        ((HomeActivity) mContext).editMovieSuggestion(movie.getId(), "1");
-                    }
+                if (mContext instanceof FindMovieActivity) {
+                    ((FindMovieActivity) mContext).addMovie(movie.getId());
                 }
             }
         });

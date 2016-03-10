@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -66,12 +67,81 @@ public class HomeActivity extends AppCompatActivity {
     ArrayAdapter<String> sAdapter;
 
 
-    public void navigateToAddMovieActivity(){
+    public void navigateToAddMovieActivity() {
         Intent intent = new Intent(this, AddMovieActivity.class);
         startActivity(intent);
     }
 
-    public void refreshActivityData(){
+    public void navigateToFindMovieActivity(String searchId) {
+        Intent intent = new Intent(this, FindMovieActivity.class);
+        String genreSearchId = "0";
+        switch (searchId) {
+            case "0":
+                genreSearchId = "1";
+                break;
+            case "1":
+                genreSearchId = "2";
+                break;
+            case "2":
+                genreSearchId = "3";
+                break;
+            case "3":
+                genreSearchId = "4";
+                break;
+            case "4":
+                genreSearchId = "5";
+                break;
+            case "5":
+                genreSearchId = "6";
+                break;
+            case "6":
+                genreSearchId = "7";
+                break;
+            case "7":
+                genreSearchId = "8";
+                break;
+            case "8":
+                genreSearchId = "9";
+                break;
+            case "9":
+                genreSearchId = "11";
+                break;
+            case "10":
+                genreSearchId = "12";
+                break;
+            case "11":
+                genreSearchId = "13";
+                break;
+            case "12":
+                genreSearchId = "14";
+                break;
+            case "13":
+                genreSearchId = "15";
+                break;
+            case "14":
+                genreSearchId = "16";
+                break;
+            case "15":
+                genreSearchId = "17";
+                break;
+            case "16":
+                genreSearchId = "18";
+                break;
+            case "17":
+                genreSearchId = "19";
+                break;
+            case "18":
+                genreSearchId = "20";
+                break;
+            case "19":
+                genreSearchId = "99";
+                break;
+        }
+        intent.putExtra("searchType", genreSearchId);
+        startActivity(intent);
+    }
+
+    public void refreshActivityData() {
         queue.add(jsArrRequest);
     }
 
@@ -83,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       // getSupportActionBar().setIcon(R.drawable.imdb);
+        // getSupportActionBar().setIcon(R.drawable.imdb);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
         //change the spinner color
         spinner.getIndeterminateDrawable().setColorFilter(0xFF4F0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
@@ -165,7 +235,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-
         queue = VolleySingleton.getInstance(this).getRequestQueue();
 
 
@@ -177,24 +246,26 @@ public class HomeActivity extends AppCompatActivity {
                         try {
                             movie.clear();
                             for (int i = 0; i < response.length(); i++) {
-                                Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"),response.getJSONObject(i).getString("release_year"),response.getJSONObject(i).getString("poster_path"),response.getJSONObject(i).getString("is_suggested"),response.getJSONObject(i).getString("suggested_cnt"),response.getJSONObject(i).getString("imdb_rating"));
+                                Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"), response.getJSONObject(i).getString("release_year"), response.getJSONObject(i).getString("poster_path"), response.getJSONObject(i).getString("is_suggested"), response.getJSONObject(i).getString("suggested_cnt"), response.getJSONObject(i).getString("imdb_rating"));
                                 movie.add(mov);
-                                if(i==response.length()-1){
+                                if (i == response.length() - 1) {
                                     //lv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
-                                    Log.d("SERVICES","UPDATED");
+                                    Log.d("SERVICES", "UPDATED");
                                 }
                             }
 
                         } catch (JSONException e) {
                             //e.printStackTrace();
                         }
-                    mSwipeRefreshLayout.setRefreshing(false);spinner.setVisibility(View.GONE);
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        spinner.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                mSwipeRefreshLayout.setRefreshing(false);spinner.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
+                spinner.setVisibility(View.GONE);
             }
         });
 
@@ -245,19 +316,53 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //selectItem(position);
-            Log.d("LEFTMENU",String.valueOf(position));
+            //Log.d("LEFTMENU",String.valueOf(position));
+            navigateToFindMovieActivity(String.valueOf(position));
         }
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             this.moveTaskToBack(true);
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void editMovieSuggestion(final String movieId, final String suggId) {
+        spinner.setVisibility(View.VISIBLE);
+        Log.d("DEBUGLOG", "Started to add movie");
+        url = "http://api.keyrelations.in/smsm/modusersuggestion/" + AccessToken.getCurrentAccessToken().getToken() + "/" + movieId + "/" + suggId;
+        Log.d("DEBUGLOG", url);
+        JsonArrayRequest jrArrRequest = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("DEBUGLOG", "Response is valid");
+                        if (suggId.equals("1")) {
+
+                            Toast.makeText(getBaseContext(), "Movie suggested to users", Toast.LENGTH_SHORT).show();
+                            Log.d("DEBUGLOG", "Movie suggested");
+                        } else {
+
+                            Toast.makeText(getBaseContext(), "Movie unsuggested to users", Toast.LENGTH_SHORT).show();
+                            Log.d("DEBUGLOG", "Movie unsuggested");
+                        }
+                        spinner.setVisibility(View.GONE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Log.d("ERROR", "ERROR");
+                //textMsg.setText("Error! Please try again.");
+                spinner.setVisibility(View.GONE);
+                Toast.makeText(getBaseContext(), "Error! Please try again", Toast.LENGTH_SHORT).show();
+                Log.d("DEBUGLOG", "API call failed");
+            }
+        });
+        jrArrRequest.setShouldCache(false);
+        queue.add(jrArrRequest);
     }
 
 }

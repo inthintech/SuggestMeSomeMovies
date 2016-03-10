@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#000</color>
     <color name="colorImageLoader">#FF4081</color>
+    <color name="colorMovieSuggested">#228B22</color>
+    <color name="colorMovieUnSuggested">#CFCFCF</color>
 </resources>

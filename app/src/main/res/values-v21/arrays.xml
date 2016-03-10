@@ -10,7 +10,6 @@
         <item>Drama</item>
         <item>Family</item>
         <item>Fantasy</item>
-        <item>Foreign</item>
         <item>History</item>
         <item>Horror</item>
         <item>Music</item>
@@ -21,5 +20,6 @@
         <item>Thriller</item>
         <item>War</item>
         <item>Western</item>
+        <item>Most Suggested</item>
     </string-array>
 </resources>
