@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#000</color>
     <color name="colorImageLoader">#FF4081</color>
     <color name="colorMovieSuggested">#228B22</color>
     <color name="colorMovieUnSuggested">#CFCFCF</color>
+    -->
+
+    <color name="colorPrimary">#B22222</color>
+    <color name="colorPrimaryDark">#7C3030</color>
+    <color name="colorAccent">#B22222</color>
+    <color name="colorImageLoader">#FF4081</color>
+    <color name="colorMovieSuggested">#228B22</color>
+    <color name="colorMovieUnSuggested">#CFCFCF</color>
+    <color name="colorProfilePicBg">#D1EEEE</color>
+
 </resources>

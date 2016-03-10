@@ -57,7 +57,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:background="#fff"
+        android:background="@color/colorProfilePicBg"
         >
 
         <!--
@@ -100,7 +100,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/navMenuUserName"
-            android:background="#eee"
+            android:background="@color/colorPrimary"
+            android:textColor="#fff"
             android:gravity="center_vertical"
             android:minHeight="?android:attr/listPreferredItemHeightSmall"
             android:paddingLeft="16dp"
@@ -117,6 +118,7 @@
             android:layout_gravity="start"
             android:choiceMode="singleChoice"
             android:divider="@android:color/transparent"
+            android:background="#fff"
             android:dividerHeight="0dp" />
 
     </RelativeLayout>
