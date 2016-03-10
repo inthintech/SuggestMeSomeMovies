@@ -34,20 +34,31 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.common.logging.LoggingDelegate;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     //new request queue
+
     //RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
+    Uri uri;
+    SimpleDraweeView draweeView;
+    TextView userName;
 
     Toolbar toolbar;
     FloatingActionButton fab;
@@ -61,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
     ProgressBar spinner;
     TextView textMsg;
 
+
     private String[] mFilterTitles;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -68,9 +80,20 @@ public class HomeActivity extends AppCompatActivity {
 
     ArrayAdapter<String> sAdapter;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
 
     public void navigateToAddMovieActivity() {
         Intent intent = new Intent(this, AddMovieActivity.class);
+        startActivity(intent);
+    }
+
+    public void navigateToLoginActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -162,8 +185,48 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // getSupportActionBar().setIcon(R.drawable.imdb);
-
         textMsg = (TextView) findViewById(R.id.textViewMessage);
+
+
+        userName = (TextView) findViewById(R.id.navMenuUserName);
+
+        draweeView = (SimpleDraweeView) findViewById(R.id.fbprofilepic);
+
+
+
+        if(Profile.getCurrentProfile()!=null) {
+            uri = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+            userName.setText(Profile.getCurrentProfile().getName());
+            draweeView.setImageURI(uri);
+        }
+        else {
+
+            GraphRequest request = GraphRequest.newMeRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+                            // Application code
+                            try {
+                                //Log.d("GRAPHAPI",object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                uri = Uri.parse(object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                draweeView.setImageURI(uri);
+                                userName.setText(object.getString("name"));
+                            }
+                            catch (JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "name,picture");
+            request.setParameters(parameters);
+            request.executeAsync();
+
+        }
+
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -225,14 +288,6 @@ public class HomeActivity extends AppCompatActivity {
         mDrawerList.setAdapter(sAdapter);
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        Uri uri = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
-        SimpleDraweeView draweeView = (SimpleDraweeView) findViewById(R.id.fbprofilepic);
-        draweeView.setImageURI(uri);
-        ////Log.d("FACEBOOK",Profile.getCurrentProfile().getProfilePictureUri(200,200).toString());
-
-        TextView userName = (TextView) findViewById(R.id.navMenuUserName);
-        userName.setText(Profile.getCurrentProfile().getName());
 
         movie = new ArrayList<>();
         adapter = new MyLibraryAdapter(this, R.layout.mylibrary_list, movie);
@@ -314,7 +369,19 @@ public class HomeActivity extends AppCompatActivity {
         }
         // Handle your other action bar items...
 
-        return super.onOptionsItemSelected(item);
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.itemLogout:
+                LoginManager.getInstance().logOut();
+                finish();
+                navigateToLoginActivity();
+                return true;
+            case R.id.itemAbout:
+                Toast.makeText(this, getResources().getString(R.string.menu_about_content), Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /*
