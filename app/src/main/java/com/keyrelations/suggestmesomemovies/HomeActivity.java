@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     RequestQueue queue;
     JsonArrayRequest jsArrRequest;
     ProgressBar spinner;
+    TextView textMsg;
 
     private String[] mFilterTitles;
     private DrawerLayout mDrawerLayout;
@@ -161,6 +163,8 @@ public class HomeActivity extends AppCompatActivity {
 
         // getSupportActionBar().setIcon(R.drawable.imdb);
 
+        textMsg = (TextView) findViewById(R.id.textViewMessage);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +176,8 @@ public class HomeActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
 
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -181,7 +187,8 @@ public class HomeActivity extends AppCompatActivity {
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         //change the spinner color
-        spinner.getIndeterminateDrawable().setColorFilter(0xFF4F0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+
 
         mFilterTitles = getResources().getStringArray(R.array.navmenu_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -222,7 +229,7 @@ public class HomeActivity extends AppCompatActivity {
         Uri uri = Profile.getCurrentProfile().getProfilePictureUri(200, 200);
         SimpleDraweeView draweeView = (SimpleDraweeView) findViewById(R.id.fbprofilepic);
         draweeView.setImageURI(uri);
-        //Log.d("FACEBOOK",Profile.getCurrentProfile().getProfilePictureUri(200,200).toString());
+        ////Log.d("FACEBOOK",Profile.getCurrentProfile().getProfilePictureUri(200,200).toString());
 
         TextView userName = (TextView) findViewById(R.id.navMenuUserName);
         userName.setText(Profile.getCurrentProfile().getName());
@@ -236,7 +243,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Movie mov = (Movie) lv.getItemAtPosition(position);
-                //Log.d("CLICKED", String.valueOf(mov.getId()));
+                ////Log.d("CLICKED", String.valueOf(mov.getId()));
                 navigateToMovieInfoActivity(String.valueOf(mov.getId()));
             }
         });
@@ -250,6 +257,9 @@ public class HomeActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        if(response.length()==0){
+                            textMsg.setText("Your movie library is empty.");
+                        }
                         try {
                             movie.clear();
                             for (int i = 0; i < response.length(); i++) {
@@ -258,7 +268,7 @@ public class HomeActivity extends AppCompatActivity {
                                 if (i == response.length() - 1) {
                                     //lv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
-                                    Log.d("SERVICES", "UPDATED");
+                                    //Log.d("SERVICES", "UPDATED");
                                 }
                             }
 
@@ -273,6 +283,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 spinner.setVisibility(View.GONE);
+                textMsg.setText("Unable to retrieve data from server!");
             }
         });
 
@@ -323,7 +334,7 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //selectItem(position);
-            //Log.d("LEFTMENU",String.valueOf(position));
+            ////Log.d("LEFTMENU",String.valueOf(position));
             navigateToFindMovieActivity(String.valueOf(position));
         }
     }
@@ -339,33 +350,33 @@ public class HomeActivity extends AppCompatActivity {
 
     public void editMovieSuggestion(final String movieId, final String suggId) {
         spinner.setVisibility(View.VISIBLE);
-        Log.d("DEBUGLOG", "Started to add movie");
+        //Log.d("DEBUGLOG", "Started to add movie");
         url = "http://api.keyrelations.in/smsm/modusersuggestion/" + AccessToken.getCurrentAccessToken().getToken() + "/" + movieId + "/" + suggId;
-        Log.d("DEBUGLOG", url);
+        //Log.d("DEBUGLOG", url);
         JsonArrayRequest jrArrRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("DEBUGLOG", "Response is valid");
+                        //Log.d("DEBUGLOG", "Response is valid");
                         if (suggId.equals("1")) {
 
                             Toast.makeText(getBaseContext(), "Movie suggested to users", Toast.LENGTH_SHORT).show();
-                            Log.d("DEBUGLOG", "Movie suggested");
+                            //Log.d("DEBUGLOG", "Movie suggested");
                         } else {
 
                             Toast.makeText(getBaseContext(), "Movie unsuggested to users", Toast.LENGTH_SHORT).show();
-                            Log.d("DEBUGLOG", "Movie unsuggested");
+                            //Log.d("DEBUGLOG", "Movie unsuggested");
                         }
                         spinner.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.d("ERROR", "ERROR");
+                ////Log.d("ERROR", "ERROR");
                 //textMsg.setText("Error! Please try again.");
                 spinner.setVisibility(View.GONE);
                 Toast.makeText(getBaseContext(), "Error! Please try again", Toast.LENGTH_SHORT).show();
-                Log.d("DEBUGLOG", "API call failed");
+                //Log.d("DEBUGLOG", "API call failed");
             }
         });
         jrArrRequest.setShouldCache(false);

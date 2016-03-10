@@ -7,14 +7,14 @@
     <color name="colorImageLoader">#FF4081</color>
     <color name="colorMovieSuggested">#228B22</color>
     <color name="colorMovieUnSuggested">#CFCFCF</color>
+    #B22222
     -->
 
     <color name="colorPrimary">#B22222</color>
-    <color name="colorPrimaryDark">#7C3030</color>
+    <color name="colorPrimaryDark">#961d1d</color>
     <color name="colorAccent">#B22222</color>
-    <color name="colorImageLoader">#FF4081</color>
     <color name="colorMovieSuggested">#228B22</color>
     <color name="colorMovieUnSuggested">#CFCFCF</color>
-    <color name="colorProfilePicBg">#D1EEEE</color>
+    <color name="colorProfilePicBg">#3b5998</color>
 
 </resources>

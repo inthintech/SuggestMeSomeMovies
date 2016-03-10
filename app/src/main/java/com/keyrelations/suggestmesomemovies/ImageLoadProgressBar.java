@@ -6,9 +6,6 @@ import android.graphics.RectF;
 
 import com.facebook.drawee.drawable.ProgressBarDrawable;
 
-/**
- * Created by Get IT on 07-03-2016.
- */
 public class ImageLoadProgressBar extends ProgressBarDrawable {
 
 
@@ -16,7 +13,7 @@ public class ImageLoadProgressBar extends ProgressBarDrawable {
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    int color = R.color.colorImageLoader;
+    int color = R.color.colorPrimary;
 
     final RectF oval = new RectF();
 

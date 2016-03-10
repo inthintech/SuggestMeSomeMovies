@@ -1,5 +1,7 @@
 package com.keyrelations.suggestmesomemovies;
 
+import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,12 @@ public class FindMovieActivity extends AppCompatActivity {
     TextView textMsg;
     ProgressBar spinner;
 
+    public void navigateToMovieInfoActivity(String movieId) {
+        Intent intent = new Intent(this, MovieInfoActivity.class);
+        intent.putExtra("movieId", movieId);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +50,7 @@ public class FindMovieActivity extends AppCompatActivity {
 
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         //change the spinner color
-        spinner.getIndeterminateDrawable().setColorFilter(0xFF4F0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
         spinner.setVisibility(View.GONE);
 
         movie = new ArrayList<>();
@@ -54,7 +62,8 @@ public class FindMovieActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Movie mov = (Movie) lv.getItemAtPosition(position);
-                Log.d("CLICKED", String.valueOf(mov.getId()));
+                ////Log.d("CLICKED", String.valueOf(mov.getId()));
+                navigateToMovieInfoActivity(String.valueOf(mov.getId()));
             }
         });
 
@@ -72,11 +81,11 @@ public class FindMovieActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("DEBUGLOG",String.valueOf(url));
-                        Log.d("DEBUGLOG","Response is valid");
-                        Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
+                        //Log.d("DEBUGLOG",String.valueOf(url));
+                        //Log.d("DEBUGLOG","Response is valid");
+                        //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
                         if(response.length()==0){
-                            textMsg.setText("No data found");
+                            textMsg.setText("No data found for this genre");
                         }
                         else{
                             textMsg.setText("");
@@ -89,13 +98,13 @@ public class FindMovieActivity extends AppCompatActivity {
                                 if(i==response.length()-1){
                                     //lv.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
-                                    Log.d("DEBUGLOG", "Data is now updated");
+                                    //Log.d("DEBUGLOG", "Data is now updated");
                                 }
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("DEBUGLOG", "JSON Exception occured");
+                            //Log.d("DEBUGLOG", "JSON Exception occured");
                         }
                         spinner.setVisibility(View.GONE);
                     }
@@ -103,13 +112,13 @@ public class FindMovieActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 spinner.setVisibility(View.GONE);
-                Log.d("DEBUGLOG", "API call failed. Unable to retrieve data");
+                //Log.d("DEBUGLOG", "API call failed. Unable to retrieve data");
                 textMsg.setText("Unable to retrieve data from server!");
             }
         });
 
         jsArrRequest.setShouldCache(false);
-        Log.d("DEBUGLOG", "Request sent to server for movie query");
+        //Log.d("DEBUGLOG", "Request sent to server for movie query");
         spinner.setVisibility(View.VISIBLE);
         queue.add(jsArrRequest);
 
@@ -118,27 +127,27 @@ public class FindMovieActivity extends AppCompatActivity {
 
     public void addMovie(final String movieId){
         spinner.setVisibility(View.VISIBLE);
-        Log.d("DEBUGLOG", "Started to add movie");
+        //Log.d("DEBUGLOG", "Started to add movie");
         url = "http://api.keyrelations.in/smsm/addusermovie/" + AccessToken.getCurrentAccessToken().getToken() + "/" + movieId;
-        Log.d("DEBUGLOG", url);
+        //Log.d("DEBUGLOG", url);
         JsonArrayRequest jrArrRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("DEBUGLOG", "Response is valid");
-                        //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
+                        //Log.d("DEBUGLOG", "Response is valid");
+                        ////Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
                         try {
-                            //Log.d("DEBUGLOG", response.getJSONObject(0).getString("message"));
-                            //Log.d("DEBUGLOG", movieId);
+                            ////Log.d("DEBUGLOG", response.getJSONObject(0).getString("message"));
+                            ////Log.d("DEBUGLOG", movieId);
 
                             if (response.getJSONObject(0).getInt("code")==1) {
                                 spinner.setVisibility(View.GONE);
                                 Toast.makeText(getBaseContext(), "Movie added to library", Toast.LENGTH_SHORT).show();
-                                Log.d("DEBUGLOG", "Movie added");
+                                //Log.d("DEBUGLOG", "Movie added");
                             } else {
                                 spinner.setVisibility(View.GONE);
                                 Toast.makeText(getBaseContext(), "Movie added in library", Toast.LENGTH_SHORT).show();
-                                Log.d("DEBUGLOG", "Movie added");
+                                //Log.d("DEBUGLOG", "Movie added");
                             }
                         } catch (JSONException e) {
 
@@ -151,10 +160,10 @@ public class FindMovieActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Log.d("ERROR", "ERROR");
+                ////Log.d("ERROR", "ERROR");
                 //textMsg.setText("Error! Please try again.");
                 spinner.setVisibility(View.GONE);
-                Log.d("DEBUGLOG", "Error Response");
+                //Log.d("DEBUGLOG", "Error Response");
             }
         });
         jrArrRequest.setShouldCache(false);

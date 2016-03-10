@@ -2,6 +2,7 @@ package com.keyrelations.suggestmesomemovies;
 
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,8 @@ public class MovieInfoActivity extends AppCompatActivity {
     Typeface font;
     TextView genreIcon;
 
+    TextView textMsg;
+
     TextView movieName;
     TextView releaseYear;
     TextView movieGenre;
@@ -56,6 +59,9 @@ public class MovieInfoActivity extends AppCompatActivity {
         genreIcon = (TextView) findViewById(R.id.textViewMovieGenreIcon);
         genreIcon.setTypeface(font);
 
+        textMsg = (TextView) findViewById(R.id.textViewMessage);
+
+
         backdropImgLink = Uri.parse("http://image.tmdb.org/t/p/w500/");
         posterImgLink = Uri.parse("http://image.tmdb.org/t/p/w342/");
         movieName = (TextView) findViewById(R.id.textViewMovieName);
@@ -75,7 +81,7 @@ public class MovieInfoActivity extends AppCompatActivity {
 
         spinner = (ProgressBar) findViewById(R.id.progressBar1);
         //change the spinner color
-        spinner.getIndeterminateDrawable().setColorFilter(0xFF4F0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -124,7 +130,7 @@ public class MovieInfoActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                textMsg.setText("No data available for this movie");
                 spinner.setVisibility(View.GONE);
             }
         });
@@ -132,12 +138,5 @@ public class MovieInfoActivity extends AppCompatActivity {
         jsArrRequest.setShouldCache(false);
         spinner.setVisibility(View.VISIBLE);
         queue.add(jsArrRequest);
-
-
-
-
-
-
-
     }
 }
