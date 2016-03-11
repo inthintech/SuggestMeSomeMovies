@@ -315,6 +315,9 @@ public class HomeActivity extends AppCompatActivity {
                         if(response.length()==0){
                             textMsg.setText("Your movie library is empty.");
                         }
+                        else {
+                            getSupportActionBar().setTitle("My Library ("+response.length()+")");
+                        }
                         try {
                             movie.clear();
                             for (int i = 0; i < response.length(); i++) {

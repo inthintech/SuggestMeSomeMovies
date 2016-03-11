@@ -7,7 +7,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -49,12 +51,15 @@ public class AddMovieActivity extends AppCompatActivity {
         //Log.d("DEBUGLOG", "Activity Started");
         Typeface font = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
 
-        final Button searchButton = (Button) findViewById(R.id.searchButton);
-        searchButton.setTypeface(font);
+        //final Button searchButton = (Button) findViewById(R.id.searchButton);
+        //searchButton.setTypeface(font);
 
         final TextView searchText = (TextView) findViewById(R.id.searchMovieTextBox);
 
         final TextView textMsg = (TextView) findViewById(R.id.textViewMessage);
+
+
+
 
         spinner = (ProgressBar)findViewById(R.id.progressBar1);
         //change the spinner color
@@ -76,6 +81,7 @@ public class AddMovieActivity extends AppCompatActivity {
             }
         });
 
+        /*
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -135,7 +141,80 @@ public class AddMovieActivity extends AppCompatActivity {
 
                 }
             }
+        });*/
+
+
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+
+                    if (!searchText.getText().toString().matches("")) {
+                        ////Log.d("SEARCH", "ONCLICK");
+                        textMsg.setText("");
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(searchText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+
+                        spinner.setVisibility(View.VISIBLE);
+
+                        //Log.d("DEBUGLOG", "A new search is started");
+                        //String  input = searchText.getText().toString();
+                        //input.replace(" ", "+");
+                        url = "http://api.keyrelations.in/smsm/searchmovie/" + AccessToken.getCurrentAccessToken().getToken() + "/" + searchText.getText().toString().replace(" ","+");
+                        //Log.d("URL",url);
+                        movie.clear();
+
+                        queue.add(new JsonArrayRequest(url,
+                                new Response.Listener<JSONArray>() {
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        //Log.d("DEBUGLOG","Response is valid");
+                                        //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
+                                        if(response.length()==0){
+                                            textMsg.setText("No data found");
+                                        }
+                                        else{
+                                            textMsg.setText("");
+                                        }
+                                        try {
+                                            for (int i = 0; i < response.length(); i++) {
+                                                Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"), response.getJSONObject(i).getString("release_year"), response.getJSONObject(i).getString("poster_path"));
+                                                movie.add(mov);
+                                                if (i == response.length() - 1) {
+                                                    //lv.setAdapter(adapter);
+                                                    adapter.notifyDataSetChanged();
+                                                    //Log.d("DEBUGLOG","Data Updated");
+                                                }
+
+                                            }
+
+                                        } catch (JSONException e) {
+
+                                            e.printStackTrace();
+                                        }
+                                        spinner.setVisibility(View.GONE);
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                //Log.d("ERROR", "ERROR");
+                                spinner.setVisibility(View.GONE);
+                                textMsg.setText("Unable to retrieve data from server!");
+                            }
+                        }));
+
+                    }
+
+                    handled = true;
+                }
+                return handled;
+            }
         });
+
+
+
 
     }
 

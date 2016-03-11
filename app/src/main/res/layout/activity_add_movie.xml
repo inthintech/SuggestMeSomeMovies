@@ -20,8 +20,9 @@
         android:inputType="text"
         android:paddingLeft="10dp"
         android:textSize="14sp"
+        android:imeOptions="actionSearch"
         />
-
+    <!--
     <Button
         android:id="@+id/searchButton"
         android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
         android:layout_toRightOf="@+id/searchMovieTextBox"
         android:text="@string/icon_search"
         android:textSize="18sp" />
-
+    -->
     <ListView
         android:id="@+id/listViewAddMovie"
         android:layout_below="@id/searchMovieTextBox"

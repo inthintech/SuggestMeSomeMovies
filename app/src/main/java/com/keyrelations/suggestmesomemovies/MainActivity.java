@@ -3,6 +3,8 @@ package com.keyrelations.suggestmesomemovies;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 // App code
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.facebook_login_failed), Toast.LENGTH_SHORT).show();
             }
         });
 
