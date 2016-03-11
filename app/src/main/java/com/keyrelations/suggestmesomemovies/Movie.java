@@ -16,7 +16,7 @@ public class Movie {
     public String getReleaseYear() { return releaseYear; }
     public String getPosterPath() { return posterPath; }
     public String getIsSuggested() { return isSuggested; }
-    public void putIsSuggested(String value) { isSuggested=value; }
+    public void setIsSuggested(String value) { isSuggested=value; }
     public String getSuggestedCount() { return suggestedCount; }
     public String getImdbRating() { return imdbRating; }
 

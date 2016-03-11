@@ -14,6 +14,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -71,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
     JsonArrayRequest jsArrRequest;
     ProgressBar spinner;
     TextView textMsg;
+    EditText filterText;
 
 
     private String[] mFilterTitles;
@@ -294,10 +298,30 @@ public class HomeActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.listViewMyLibrary);
         lv.setAdapter(adapter);
 
+
+        filterText = (EditText) findViewById(R.id.filterMovieTextBox);
+
+        filterText.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(movie.size()>0) {
+                    adapter.getFilter().filter(s.toString());
+                }
+            }
+        });
+
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Movie mov = (Movie) lv.getItemAtPosition(position);
+                //Movie mov = (Movie) lv.getItemAtPosition(position);
+                Movie mov = (Movie) lv.getAdapter().getItem(position);
                 ////Log.d("CLICKED", String.valueOf(mov.getId()));
                 navigateToMovieInfoActivity(String.valueOf(mov.getId()));
             }
@@ -317,6 +341,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         else {
                             getSupportActionBar().setTitle("My Library ("+response.length()+")");
+                            filterText.setText("");
                         }
                         try {
                             movie.clear();

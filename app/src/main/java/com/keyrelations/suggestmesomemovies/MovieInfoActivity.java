@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -88,7 +89,7 @@ public class MovieInfoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if(extras.getString("movieId") != null){
-                url = "http://api.keyrelations.in/smsm/getmovieinfo/"+"/"+extras.getString("movieId");
+                url = "http://api.keyrelations.in/smsm/getmovieinfo/"+extras.getString("movieId");
             }
         }
 
@@ -131,11 +132,15 @@ public class MovieInfoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 textMsg.setText("No data available for this movie");
+                error.printStackTrace();
                 spinner.setVisibility(View.GONE);
             }
         });
 
         jsArrRequest.setShouldCache(false);
+        jsArrRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         spinner.setVisibility(View.VISIBLE);
         queue.add(jsArrRequest);
     }
