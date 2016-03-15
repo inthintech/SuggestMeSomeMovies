@@ -2,12 +2,9 @@ package com.keyrelations.suggestmesomemovies;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -40,8 +34,6 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.common.logging.LoggingDelegate;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.login.LoginManager;
 
@@ -49,7 +41,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,9 +68,7 @@ public class HomeActivity extends AppCompatActivity {
     EditText filterText;
 
 
-    private String[] mFilterTitles;
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+
     private ActionBarDrawerToggle mDrawerToggle;
 
     ArrayAdapter<String> sAdapter;
@@ -257,10 +246,9 @@ public class HomeActivity extends AppCompatActivity {
         //change the spinner color
         spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getBaseContext(),R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-
-        mFilterTitles = getResources().getStringArray(R.array.navmenu_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        String[] mFilterTitles = getResources().getStringArray(R.array.navmenu_array);
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ListView mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -284,10 +272,12 @@ public class HomeActivity extends AppCompatActivity {
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
-        sAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, mFilterTitles);
+        sAdapter = new ArrayAdapter<>(this, R.layout.drawer_list_item, mFilterTitles);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(sAdapter);
@@ -338,7 +328,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         if(response.length()==0){
-                            textMsg.setText("Your movie library is empty.");
+                            textMsg.setText(getResources().getString(R.string.empty_library));
                         }
                         else {
                             getSupportActionBar().setTitle("My Library ("+response.length()+")");
@@ -367,7 +357,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 mSwipeRefreshLayout.setRefreshing(false);
                 spinner.setVisibility(View.GONE);
-                textMsg.setText("Unable to retrieve data from server!");
+                textMsg.setText(getResources().getString(R.string.server_error));
             }
         });
 
