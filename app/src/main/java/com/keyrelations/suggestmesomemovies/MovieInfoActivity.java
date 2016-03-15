@@ -89,7 +89,7 @@ public class MovieInfoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if(extras.getString("movieId") != null){
-                url = "http://api.keyrelations.in/smsm/getmovieinfo/"+extras.getString("movieId");
+                url = "http://api.keyrelations.in/smsm/getmovieinfo/"+String.valueOf(AccessToken.getCurrentAccessToken().getToken())+"/"+extras.getString("movieId");
             }
         }
 

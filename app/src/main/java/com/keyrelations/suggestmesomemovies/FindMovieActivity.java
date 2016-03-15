@@ -34,6 +34,7 @@ public class FindMovieActivity extends AppCompatActivity {
     JsonArrayRequest jsArrRequest;
     TextView textMsg;
     ProgressBar spinner;
+    String title;
 
     public void navigateToMovieInfoActivity(String movieId) {
         Intent intent = new Intent(this, MovieInfoActivity.class);
@@ -74,6 +75,10 @@ public class FindMovieActivity extends AppCompatActivity {
             if(extras.getString("searchType") != null){
                 url = "http://api.keyrelations.in/smsm/findmovie/" + AccessToken.getCurrentAccessToken().getToken() +"/"+extras.getString("searchType");
             }
+            if(extras.getString("searchName") != null){
+                title = extras.getString("searchName");
+                setTitle(title);
+            }
         }
 
         //define the json request
@@ -89,6 +94,7 @@ public class FindMovieActivity extends AppCompatActivity {
                         }
                         else{
                             textMsg.setText("");
+                            setTitle(title + " ("+String.valueOf(response.length())+")");
                         }
                         try {
                             movie.clear();

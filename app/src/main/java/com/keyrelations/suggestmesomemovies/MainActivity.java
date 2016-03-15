@@ -3,6 +3,7 @@ package com.keyrelations.suggestmesomemovies;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             public void onInitialized() {
                 // if access token already exist and valid
                 if (AccessToken.getCurrentAccessToken() != null && !AccessToken.getCurrentAccessToken().isExpired()) {
+                    //Log.d("ACCESSTOKE",String.valueOf(AccessToken.getCurrentAccessToken().getToken()));
                     navigateToHomeActivity();
                 }
             }

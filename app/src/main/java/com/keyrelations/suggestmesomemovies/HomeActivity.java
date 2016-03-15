@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void navigateToFindMovieActivity(String searchId) {
+    public void navigateToFindMovieActivity(String searchId,String searchName) {
         Intent intent = new Intent(this, FindMovieActivity.class);
         String genreSearchId = "0";
         switch (searchId) {
@@ -173,6 +173,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
         intent.putExtra("searchType", genreSearchId);
+        intent.putExtra("searchName", searchName);
         startActivity(intent);
     }
 
@@ -430,7 +431,7 @@ public class HomeActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //selectItem(position);
             ////Log.d("LEFTMENU",String.valueOf(position));
-            navigateToFindMovieActivity(String.valueOf(position));
+            navigateToFindMovieActivity(String.valueOf(position),String.valueOf(parent.getItemAtPosition(position)));
         }
     }
 

@@ -44,6 +44,10 @@ public class AddMovieActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void movieInfoNotAvailable() {
+        Toast.makeText(getBaseContext(), "Movie info not available in this section", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +81,8 @@ public class AddMovieActivity extends AppCompatActivity {
                                     int position, long id) {
                 Movie mov = (Movie) lv.getItemAtPosition(position);
                 ////Log.d("CLICKED", String.valueOf(mov.getId()));
-                navigateToMovieInfoActivity(String.valueOf(mov.getId()));
+                //navigateToMovieInfoActivity(String.valueOf(mov.getId()));
+                movieInfoNotAvailable();
             }
         });
 
