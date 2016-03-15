@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -90,7 +89,7 @@ public class FindMovieActivity extends AppCompatActivity {
                         //Log.d("DEBUGLOG","Response is valid");
                         //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
                         if(response.length()==0){
-                            textMsg.setText("No data found for this genre");
+                            textMsg.setText(getResources().getString(R.string.no_data_found));
                         }
                         else{
                             textMsg.setText("");
@@ -119,7 +118,7 @@ public class FindMovieActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 spinner.setVisibility(View.GONE);
                 //Log.d("DEBUGLOG", "API call failed. Unable to retrieve data");
-                textMsg.setText("Unable to retrieve data from server!");
+                textMsg.setText(getResources().getString(R.string.server_error));
             }
         });
 

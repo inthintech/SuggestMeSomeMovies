@@ -1,18 +1,14 @@
 package com.keyrelations.suggestmesomemovies;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,8 +23,6 @@ import com.facebook.AccessToken;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +32,11 @@ public class AddMovieActivity extends AppCompatActivity {
     RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
     ProgressBar spinner;
 
-    public void navigateToMovieInfoActivity(String movieId) {
+    /*public void navigateToMovieInfoActivity(String movieId) {
         Intent intent = new Intent(this, MovieInfoActivity.class);
         intent.putExtra("movieId", movieId);
         startActivity(intent);
-    }
+    }*/
 
     public void movieInfoNotAvailable() {
         Toast.makeText(getBaseContext(), "Movie info not available in this section", Toast.LENGTH_SHORT).show();
@@ -53,7 +47,7 @@ public class AddMovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
         //Log.d("DEBUGLOG", "Activity Started");
-        Typeface font = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
+        //Typeface font = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
 
         //final Button searchButton = (Button) findViewById(R.id.searchButton);
         //searchButton.setTypeface(font);
@@ -79,7 +73,7 @@ public class AddMovieActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Movie mov = (Movie) lv.getItemAtPosition(position);
+                //Movie mov = (Movie) lv.getItemAtPosition(position);
                 ////Log.d("CLICKED", String.valueOf(mov.getId()));
                 //navigateToMovieInfoActivity(String.valueOf(mov.getId()));
                 movieInfoNotAvailable();
@@ -178,7 +172,7 @@ public class AddMovieActivity extends AppCompatActivity {
                                         //Log.d("DEBUGLOG","Response is valid");
                                         //Log.d("DEBUGLOG", "Response has " + String.valueOf(response.length()) + " records");
                                         if(response.length()==0){
-                                            textMsg.setText("No data found");
+                                            textMsg.setText(getResources().getString(R.string.no_data_found));
                                         }
                                         else{
                                             textMsg.setText("");
@@ -206,7 +200,7 @@ public class AddMovieActivity extends AppCompatActivity {
                             public void onErrorResponse(VolleyError error) {
                                 //Log.d("ERROR", "ERROR");
                                 spinner.setVisibility(View.GONE);
-                                textMsg.setText("Unable to retrieve data from server!");
+                                textMsg.setText(getResources().getString(R.string.server_error));
                             }
                         }));
 
