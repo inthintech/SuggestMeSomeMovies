@@ -98,7 +98,7 @@ public class FindMovieActivity extends AppCompatActivity {
 
 
 
-        AdSettings.addTestDevice("c69b4f0755b4deb0c0bb4061f950e40a");
+        //AdSettings.addTestDevice("c69b4f0755b4deb0c0bb4061f950e40a");
 
         // Request to load an ad
         adView.loadAd();
