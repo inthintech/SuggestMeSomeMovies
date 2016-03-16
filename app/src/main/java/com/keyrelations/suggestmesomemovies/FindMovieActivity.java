@@ -5,12 +5,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.facebook.ads.*;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -34,6 +36,8 @@ public class FindMovieActivity extends AppCompatActivity {
     TextView textMsg;
     ProgressBar spinner;
     String title;
+    AdView adView;
+    RelativeLayout mlayout;
 
     public void navigateToMovieInfoActivity(String movieId) {
         Intent intent = new Intent(this, MovieInfoActivity.class);
@@ -42,13 +46,66 @@ public class FindMovieActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        adView.destroy();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_movie);
 
+        // Instantiate an AdView view
+        adView = new AdView(this, "223264698023434_232733610409876", AdSize.BANNER_HEIGHT_50);
+
+
+        adView.setAdListener(new AdListener() {
+
+            @Override
+            public void onError(Ad ad, AdError error) {
+                // Ad failed to load.
+                // Add code to hide the ad's view
+
+                adView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                // Ad was loaded
+                // Add code to show the ad's view
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                // Use this function to detect when an ad was clicked.
+            }
+
+        });
+
+        // Find the main layout of your activity
+        mlayout = (RelativeLayout)findViewById(R.id.layoutFindMovie);
+
+        // Add the ad view to your activity layout
+        mlayout.addView(adView);
+
+        adView.setId(R.id.reservedNamedIdAds);
+
+        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        p.addRule(RelativeLayout.BELOW, R.id.reservedNamedIdAds);
+
+
+
+        AdSettings.addTestDevice("c69b4f0755b4deb0c0bb4061f950e40a");
+
+        // Request to load an ad
+        adView.loadAd();
+
         textMsg = (TextView) findViewById(R.id.textViewMessage);
 
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
         //change the spinner color
         spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
         spinner.setVisibility(View.GONE);
@@ -56,6 +113,9 @@ public class FindMovieActivity extends AppCompatActivity {
         movie = new ArrayList<>();
         adapter = new FindMovieAdapter(this, R.layout.findmovie_list, movie);
         lv = (ListView) findViewById(R.id.listViewFindMovie);
+        if(adView.getVisibility()==View.VISIBLE) {
+            lv.setLayoutParams(p);
+        }
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,7 +153,7 @@ public class FindMovieActivity extends AppCompatActivity {
                         }
                         else{
                             textMsg.setText("");
-                            setTitle(title + " ("+String.valueOf(response.length())+")");
+                            setTitle(title + " (" + String.valueOf(response.length())+")");
                         }
                         try {
                             movie.clear();
