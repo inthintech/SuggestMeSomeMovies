@@ -1,7 +1,5 @@
 package com.keyrelations.suggestmesomemovies;
 
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -14,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -103,7 +100,8 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> implements Filterable 
 
         TextView text4 = (TextView) convertView.findViewById(R.id.textViewSuggestedCnt);
         text4.setTypeface(font);
-        text4.setText(getContext().getString(R.string.icon_people)+" "+movie.getSuggestedCount());
+        String suggCnt = getContext().getString(R.string.icon_people)+" "+movie.getSuggestedCount();
+        text4.setText(suggCnt);
 
         Uri uri = Uri.parse("http://image.tmdb.org/t/p/w342/" + movie.getPosterPath());
         SimpleDraweeView draweeView = (SimpleDraweeView) convertView.findViewById(R.id.imageViewMoviePoster);

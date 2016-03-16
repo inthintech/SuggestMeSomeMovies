@@ -60,7 +60,8 @@ public class FindMovieAdapter extends ArrayAdapter<Movie> {
 
         TextView text4 = (TextView) convertView.findViewById(R.id.textViewSuggestedCnt);
         text4.setTypeface(font);
-        text4.setText(getContext().getString(R.string.icon_people)+" "+movie.getSuggestedCount());
+        String suggCnt = getContext().getString(R.string.icon_people)+" "+movie.getSuggestedCount();
+        text4.setText(suggCnt);
 
         Uri uri = Uri.parse("http://image.tmdb.org/t/p/w342/" + movie.getPosterPath());
         SimpleDraweeView draweeView = (SimpleDraweeView) convertView.findViewById(R.id.imageViewMoviePoster);
