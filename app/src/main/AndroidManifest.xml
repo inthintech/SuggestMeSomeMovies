@@ -43,7 +43,7 @@
         <activity
             android:name=".FindMovieActivity"
             android:label="Find Movie" />
-        <activity android:name=".MovieInfoActivity" android:label="Movie Info"></activity>
+        <activity android:name=".MovieInfoActivity" android:label="Movie Info"/>
     </application>
 
 </manifest>
