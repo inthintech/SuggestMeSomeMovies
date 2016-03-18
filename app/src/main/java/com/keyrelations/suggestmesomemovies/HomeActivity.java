@@ -332,6 +332,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         else {
                             getSupportActionBar().setTitle("My Library ("+response.length()+")");
+                            textMsg.setText("");
                             filterText.setText("");
                         }
                         try {
