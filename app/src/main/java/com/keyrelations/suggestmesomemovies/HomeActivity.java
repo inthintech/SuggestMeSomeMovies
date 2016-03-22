@@ -328,6 +328,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         if(response.length()==0){
+                            movie.clear();
                             textMsg.setText(getResources().getString(R.string.empty_library));
                         }
                         else {
