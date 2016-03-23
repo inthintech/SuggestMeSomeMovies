@@ -134,15 +134,17 @@ public class MyLibraryFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         if(response.length()==0){
                             movie.clear();
+                            adapter.notifyDataSetChanged();
                             textMsg.setText(getResources().getString(R.string.empty_library));
                         }
                         else {
                             //getSupportActionBar().setTitle("My Library ("+response.length()+")");
+                            movie.clear();
+                            adapter.notifyDataSetChanged();
                             textMsg.setText("");
                             filterText.setText("");
                         }
                         try {
-                            movie.clear();
                             for (int i = 0; i < response.length(); i++) {
                                 Movie mov = new Movie(response.getJSONObject(i).getString("id"), response.getJSONObject(i).getString("title"), response.getJSONObject(i).getString("release_year"), response.getJSONObject(i).getString("poster_path"), response.getJSONObject(i).getString("is_suggested"), response.getJSONObject(i).getString("suggested_cnt"), response.getJSONObject(i).getString("imdb_rating"));
                                 movie.add(mov);

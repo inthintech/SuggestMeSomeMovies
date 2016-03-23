@@ -53,7 +53,7 @@ public class TabActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount()-1);
+        mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount() - 1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -158,9 +158,9 @@ public class TabActivity extends AppCompatActivity {
                 case 0:
                     return new MyLibraryFragment();
                 case 1:
-                    return new TestTab();
+                    return new TopSuggestionsFragment();
                 case 2:
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return new FindByGenreFragment();
                 default:
                     return null;
             }

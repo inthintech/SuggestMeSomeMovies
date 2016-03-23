@@ -56,7 +56,8 @@
         android:id="@+id/activity_main_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_below="@+id/filterMovieTextBox"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp">
 
         <ListView
             android:id="@+id/listViewMyLibrary"
@@ -65,7 +66,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
