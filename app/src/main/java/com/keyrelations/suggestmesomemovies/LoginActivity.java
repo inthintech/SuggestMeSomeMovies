@@ -36,6 +36,9 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.title_activity_tab));
+        }
         //create a login button instance
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
 

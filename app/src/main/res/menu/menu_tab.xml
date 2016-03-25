@@ -8,7 +8,7 @@
         android:title="@string/menu_logout"
         app:showAsAction="never" />
     <item
-        android:id="@+id/itemAbout"
+        android:id="@+id/action_about"
         app:showAsAction="never"
         android:title="@string/menu_credits" />
 </menu>

@@ -163,12 +163,12 @@ public class TabActivity extends AppCompatActivity {
 
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.itemLogout:
+            case R.id.action_logout:
                 LoginManager.getInstance().logOut();
                 finish();
                 navigateToLoginActivity();
                 return true;
-            case R.id.itemAbout:
+            case R.id.action_about:
                 Toast.makeText(this, getResources().getString(R.string.menu_about_content), Toast.LENGTH_SHORT).show();
                 return true;
             default:

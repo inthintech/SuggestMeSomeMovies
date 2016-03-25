@@ -235,7 +235,11 @@ public class FindByGenreFragment extends Fragment implements AdapterView.OnItemS
         startActivity(intent);
     }
 
-
+    @Override
+    public void onDestroy() {
+        adView.destroy();
+        super.onDestroy();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -104,6 +104,12 @@ public class TopSuggestionsFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        adView.destroy();
+        super.onDestroy();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_find_movie, container, false);
 
