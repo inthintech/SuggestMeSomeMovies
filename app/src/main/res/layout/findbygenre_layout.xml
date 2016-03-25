@@ -13,13 +13,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
+        style="@android:style/Widget.Holo.Light.Spinner"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/icon_movie"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/textViewGenreIcon"
         android:textSize="16sp"
         android:layout_toLeftOf="@+id/genre_spinner"
