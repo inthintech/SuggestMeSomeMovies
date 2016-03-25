@@ -189,7 +189,7 @@ public class TopSuggestionsFragment extends Fragment {
         //ViewGroup.MarginLayoutParams lpt =(ViewGroup.MarginLayoutParams)adView.getLayoutParams();
         //lpt.setMargins(lpt.leftMargin, lpt.topMargin, lpt.rightMargin, adView.getHeight() / 2);
 
-        AdSettings.addTestDevice("c69b4f0755b4deb0c0bb4061f950e40a");
+        //AdSettings.addTestDevice("c69b4f0755b4deb0c0bb4061f950e40a");
 
         // Request to load an ad
         adView.loadAd();
