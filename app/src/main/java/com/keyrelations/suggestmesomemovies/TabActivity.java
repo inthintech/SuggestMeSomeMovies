@@ -1,5 +1,8 @@
 package com.keyrelations.suggestmesomemovies;
 
+import android.content.Intent;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,8 +22,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.facebook.Profile;
 import com.keyrelations.suggestmesomemovies.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class TabActivity extends AppCompatActivity {
 
@@ -33,16 +46,45 @@ public class TabActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private boolean doubleBackToExitPressedOnce = false;
+    FloatingActionButton fab;
+    Fragment myLibraryFragment;
+    Fragment findByGenre;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
 
+    public void navigateToLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void hideFloatingActionBar(){
+
+        fab.setVisibility(View.GONE);
+        Log.d("DEBUGLOG","FAB Hidden");
+    }
+
+    public void showFloatingActionBar(){
+
+        fab.setVisibility(View.VISIBLE);
+        Log.d("DEBUGLOG", "FAB Shown");
+    }
+
+    public void navigateToAddMovieActivity() {
+        Intent intent = new Intent(this, AddMovieActivity.class);
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        Toast.makeText(this, "Logged in as " + Profile.getCurrentProfile().getName(), Toast.LENGTH_SHORT).show();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,18 +94,53 @@ public class TabActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+
+        mViewPager.addOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        // When swiping between pages, select the
+                        // corresponding tab.
+                        //getActionBar().setSelectedNavigationItem(position);
+                        switch (position) {
+                            case 1:
+                                //showFloatingActionBar();
+                                //Log.d("DEBUGLOG","PAGE 1");
+                            case 2:
+                                //hideFloatingActionBar();
+                                //Log.d("DEBUGLOG","PAGE 2");
+                            case 3:
+                                //hideFloatingActionBar();
+                                //Log.d("DEBUGLOG","PAGE 3");
+                        }
+                        Log.d("DEBUGLOG","PAGE "+String.valueOf(position));
+
+                        if(position==0){
+                            showFloatingActionBar();
+                        }
+                        if(position==1){
+                            hideFloatingActionBar();
+                        }
+                        if(position==2){
+                            hideFloatingActionBar();
+                        }
+                    }
+                });
+
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount() - 1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                  //      .setAction("Action", null).show();
+                navigateToAddMovieActivity();
             }
         });
 
@@ -84,12 +161,19 @@ public class TabActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.itemLogout:
+                LoginManager.getInstance().logOut();
+                finish();
+                navigateToLoginActivity();
+                return true;
+            case R.id.itemAbout:
+                Toast.makeText(this, getResources().getString(R.string.menu_about_content), Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -156,10 +240,13 @@ public class TabActivity extends AppCompatActivity {
             //Log.d("DEBUGLOG",String.valueOf(position));
             switch (position) {
                 case 0:
+                    //fab.setVisibility(View.VISIBLE);
                     return new MyLibraryFragment();
                 case 1:
+                    //fab.setVisibility(View.GONE);
                     return new TopSuggestionsFragment();
                 case 2:
+                    //fab.setVisibility(View.GONE);
                     return new FindByGenreFragment();
                 default:
                     return null;
@@ -179,11 +266,29 @@ public class TabActivity extends AppCompatActivity {
                 case 0:
                     return "Watched";
                 case 1:
-                    return "Top Suggestions";
+                    return "Top 50";
                 case 2:
-                    return "Find By Genre";
+                    return "By Genre";
             }
             return null;
         }
+    }
+
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 }

@@ -1,7 +1,9 @@
 package com.keyrelations.suggestmesomemovies;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -46,6 +49,12 @@ public class MyLibraryFragment extends Fragment {
         queue.add(jsArrRequest);
     }
 
+    public void navigateToMovieInfoActivity(String movieId) {
+        Intent intent = new Intent(getContext(), MovieInfoActivity.class);
+        intent.putExtra("movieId", movieId);
+        startActivity(intent);
+    }
+
     public void editMovieSuggestion(final String movieId, final String suggId) {
         spinner.setVisibility(View.VISIBLE);
         //Log.d("DEBUGLOG", "Started to add movie");
@@ -57,11 +66,11 @@ public class MyLibraryFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         //Log.d("DEBUGLOG", "Response is valid");
                         if (suggId.equals("1")) {
-
+                            //adapter.suggestButtonActive();
                             Toast.makeText(getContext(), "Movie suggested to users", Toast.LENGTH_SHORT).show();
                             //Log.d("DEBUGLOG", "Movie suggested");
                         } else {
-
+                            //adapter.suggestButtonUnActive();
                             Toast.makeText(getContext(), "Movie unsuggested to users", Toast.LENGTH_SHORT).show();
                             //Log.d("DEBUGLOG", "Movie unsuggested");
                         }
@@ -101,9 +110,19 @@ public class MyLibraryFragment extends Fragment {
         spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         movie = new ArrayList<>();
-        adapter = new MyLibraryAdapter(getContext(), R.layout.mylibrary_list, movie);
+        adapter = new MyLibraryAdapter(getContext(), R.layout.mylibrary_list, movie,this);
         lv = (ListView) rootView.findViewById(R.id.listViewMyLibrary);
         lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //Movie mov = (Movie) lv.getItemAtPosition(position);
+                Movie mov = (Movie) lv.getAdapter().getItem(position);
+                ////Log.d("CLICKED", String.valueOf(mov.getId()));
+                navigateToMovieInfoActivity(String.valueOf(mov.getId()));
+            }
+        });
 
         textMsg = (TextView) rootView.findViewById(R.id.textViewMessage);
 

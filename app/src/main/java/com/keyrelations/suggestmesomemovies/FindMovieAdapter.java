@@ -1,5 +1,7 @@
 package com.keyrelations.suggestmesomemovies;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -18,12 +20,23 @@ public class FindMovieAdapter extends ArrayAdapter<Movie> {
 
     private List<Movie> movies;
     private Context mContext;
+    private FindByGenreFragment findByGenreFragment;
+    private TopSuggestionsFragment topSuggestionsFragment;
 
-    public FindMovieAdapter(Context context, int resource, List<Movie> objects) {
+    public FindMovieAdapter(Context context, int resource, List<Movie> objects, FindByGenreFragment fragment) {
         super(context, resource, objects);
         //AssetManager mngr = context.getAssets();
         movies = objects;
         this.mContext = context;
+        this.findByGenreFragment=fragment;
+    }
+
+    public FindMovieAdapter(Context context, int resource, List<Movie> objects, TopSuggestionsFragment fragment) {
+        super(context, resource, objects);
+        //AssetManager mngr = context.getAssets();
+        movies = objects;
+        this.mContext = context;
+        this.topSuggestionsFragment=fragment;
     }
 
     @Override
@@ -43,8 +56,14 @@ public class FindMovieAdapter extends ArrayAdapter<Movie> {
 
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mContext instanceof FindMovieActivity) {
+                /*if (mContext instanceof FindMovieActivity) {
                     ((FindMovieActivity) mContext).addMovie(movie.getId());
+                }*/
+                if(findByGenreFragment!=null) {
+                    findByGenreFragment.addMovie(movie.getId());
+                }
+                if(topSuggestionsFragment!=null){
+                    topSuggestionsFragment.addMovie(movie.getId());
                 }
             }
         });

@@ -24,6 +24,7 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> implements Filterable 
     private List<Movie> movies;
     private List<Movie> originalMovies;
     private Context mContext;
+    private MyLibraryFragment myLibraryFragment;
     private ItemFilter mFilter = new ItemFilter();
 
     public MyLibraryAdapter(Context context, int resource, List<Movie> objects) {
@@ -33,6 +34,16 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> implements Filterable 
         originalMovies = objects;
         //filteredMovies.clear();
         this.mContext = context;
+    }
+
+    public MyLibraryAdapter(Context context, int resource, List<Movie> objects,MyLibraryFragment fragment) {
+        super(context, resource, objects);
+        //AssetManager mngr = context.getAssets();
+        movies = objects;
+        originalMovies = objects;
+        //filteredMovies.clear();
+        this.mContext = context;
+        this.myLibraryFragment = fragment;
     }
 
     public Filter getFilter() {
@@ -74,7 +85,7 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> implements Filterable 
 
         suggestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mContext instanceof HomeActivity) {
+                /*if (mContext instanceof HomeActivity) {
                     if(movie.getIsSuggested().equals("Y")){
                         movie.setIsSuggested("N");
                         //suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieUnSuggested));
@@ -84,6 +95,18 @@ public class MyLibraryAdapter extends ArrayAdapter<Movie> implements Filterable 
                         movie.setIsSuggested("Y");
                         //suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieSuggested));
                         ((HomeActivity) mContext).editMovieSuggestion(movie.getId(), "1");
+                    }
+                }*/
+
+                if (myLibraryFragment!=null) {
+                    if (movie.getIsSuggested().equals("Y")) {
+                        movie.setIsSuggested("N");
+                        suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieUnSuggested));
+                        myLibraryFragment.editMovieSuggestion(movie.getId(), "0");
+                    } else {
+                        movie.setIsSuggested("Y");
+                        suggestButton.setTextColor(ContextCompat.getColor(mContext, R.color.colorMovieSuggested));
+                        myLibraryFragment.editMovieSuggestion(movie.getId(), "1");
                     }
                 }
             }

@@ -111,7 +111,7 @@ public class FindMovieActivity extends AppCompatActivity {
         spinner.setVisibility(View.GONE);
 
         movie = new ArrayList<>();
-        adapter = new FindMovieAdapter(this, R.layout.findmovie_list, movie);
+        //adapter = new FindMovieAdapter(this, R.layout.findmovie_list, movie);
         lv = (ListView) findViewById(R.id.listViewFindMovie);
         if(adView.getVisibility()==View.VISIBLE) {
             lv.setLayoutParams(p);
